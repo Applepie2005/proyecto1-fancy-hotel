@@ -67,3 +67,9 @@ def test_manager_can_get_demand_forecast(client):
     data = response.get_json()
     assert data["forecast"]
     assert {"location", "month", "predicted_occupancy", "price_suggestion"}.issubset(data["forecast"][0])
+
+
+def test_customer_cannot_access_demand_forecast(client):
+    login(client, "C0001")
+    response = client.get("/api/reports/demandForecast")
+    assert response.status_code == 403

@@ -1,9 +1,28 @@
+import re
 from datetime import datetime
 
 from flask import session
 from flask_restful import Resource, reqparse, request
 
 import db
+
+
+class QueryRequestParser(reqparse.RequestParser):
+    """Query-string args only; avoids Flask-RESTful parsing JSON on GET."""
+
+    def add_argument(self, *args, **kwargs):
+        if "location" not in kwargs:
+            kwargs["location"] = "args"
+        return super(QueryRequestParser, self).add_argument(*args, **kwargs)
+
+
+class JsonBodyRequestParser(reqparse.RequestParser):
+    """JSON body only for POST/PUT from the Angular client."""
+
+    def add_argument(self, *args, **kwargs):
+        if "location" not in kwargs:
+            kwargs["location"] = "json"
+        return super(JsonBodyRequestParser, self).add_argument(*args, **kwargs)
 
 
 def _role():
@@ -22,31 +41,47 @@ def _date_delta(check_in, check_out):
     return (end - start).days
 
 
-class NewUserRegistrationResource(Resource):
-    def __init__(self):
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument("username", type=str, required=True, location="json")
-        self.reqparse.add_argument("email", type=str, required=True, location="json")
-        self.reqparse.add_argument("password", type=str, required=True, location="json")
-        self.reqparse.add_argument("firstName", type=str, required=True, location="json")
-        self.reqparse.add_argument("lastName", type=str, required=True, location="json")
+_CUSTOMER_USERNAME = re.compile(r"^C[A-Z0-9]{4}$")
+_EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
+
+class NewUserRegistrationResource(Resource):
     def post(self):
-        args = self.reqparse.parse_args()
-        username = args["username"].upper()
-        if not username.startswith("C") or len(username) != 5:
-            return {"error": "Customer usernames must use C plus four characters", "result": False}, 400
-        if db.mysqldb.user_exists(username) or db.mysqldb.email_exists(args["email"]):
-            return {"error": "This user already exists", "result": False}, 400
-        db.mysqldb.register_user(username, args["email"], args["password"], args["firstName"], args["lastName"])
-        return {"message": "User successfully created", "result": True}
+        body = request.get_json(silent=True)
+        if not body:
+            return {"error": "Datos de registro inválidos. Recarga la página e intenta de nuevo.", "result": False}, 400
+
+        username = (body.get("username") or "").strip().upper()
+        email = (body.get("email") or "").strip()
+        password = body.get("password") or ""
+        first_name = (body.get("firstName") or "").strip()
+        last_name = (body.get("lastName") or "").strip()
+
+        if not username or not email or not password or not first_name or not last_name:
+            return {"error": "Completa usuario, nombre, apellido, correo y contraseña.", "result": False}, 400
+        if not _CUSTOMER_USERNAME.match(username):
+            return {
+                "error": "El usuario debe ser C seguido de 4 letras o números (ejemplo: C1234).",
+                "result": False,
+            }, 400
+        if not _EMAIL.match(email):
+            return {"error": "Correo electrónico inválido.", "result": False}, 400
+        if len(password) < 6:
+            return {"error": "La contraseña debe tener al menos 6 caracteres.", "result": False}, 400
+        if db.mysqldb.user_exists(username):
+            return {"error": "Ese nombre de usuario ya está registrado. Elige otro (ej. C5678).", "result": False}, 400
+        if db.mysqldb.email_exists(email):
+            return {"error": "Ese correo ya está registrado. Usa otro correo.", "result": False}, 400
+
+        db.mysqldb.register_user(username, email, password, first_name, last_name)
+        return {"message": "Usuario creado correctamente", "result": True}
 
 
 class LoginResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument("username", type=str, required=True, location="json")
-        self.reqparse.add_argument("password", type=str, required=True, location="json")
+        self.reqparse = JsonBodyRequestParser()
+        self.reqparse.add_argument("username", type=str, required=True)
+        self.reqparse.add_argument("password", type=str, required=True)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -66,7 +101,7 @@ class LogoutResource(Resource):
 
 class SearchRoomsResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("location", type=str, required=True)
         self.reqparse.add_argument("checkIn", type=str, required=True)
         self.reqparse.add_argument("checkOut", type=str, required=True)
@@ -99,7 +134,7 @@ class CreateReservationResource(Resource):
 
 class UpdateReservationResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = JsonBodyRequestParser()
         self.reqparse.add_argument("reservation_id", type=str, required=True)
         self.reqparse.add_argument("checkIn", type=str, required=True)
         self.reqparse.add_argument("checkOut", type=str, required=True)
@@ -119,11 +154,11 @@ class UpdateReservationResource(Resource):
 
 class ReservationResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = JsonBodyRequestParser()
         self.reqparse.add_argument("checkIn", type=str, required=True)
         self.reqparse.add_argument("checkOut", type=str, required=True)
         self.reqparse.add_argument("username", type=str, required=True)
-        self.getreqparse = reqparse.RequestParser()
+        self.getreqparse = QueryRequestParser()
         self.getreqparse.add_argument("username", type=str, required=True)
 
     def get(self, reservation_id):
@@ -148,7 +183,7 @@ class ReservationResource(Resource):
 
 class UpdateReservationConfirmResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("checkIn", type=str, required=True)
         self.reqparse.add_argument("checkOut", type=str, required=True)
         self.reqparse.add_argument("username", type=str, required=True)
@@ -166,7 +201,7 @@ class UpdateReservationConfirmResource(Resource):
 
 class CancelReservationResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("username", type=str, required=True)
 
     def get(self, reservation_id):
@@ -177,9 +212,9 @@ class CancelReservationResource(Resource):
 
 class CreditCardResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("username", type=str, required=True)
-        self.delete_reqparse = reqparse.RequestParser()
+        self.delete_reqparse = QueryRequestParser()
         self.delete_reqparse.add_argument("username", type=str, required=True)
         self.delete_reqparse.add_argument("card_number", type=str, required=True)
         self.create_reqparse = reqparse.RequestParser()
@@ -213,7 +248,7 @@ class CreditCardResource(Resource):
 
 class ReviewResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("location", type=str, required=True)
         self.create_reqparse = reqparse.RequestParser()
         self.create_reqparse.add_argument("username", type=str, required=True, location="json")
@@ -233,7 +268,7 @@ class ReviewResource(Resource):
 
 class CalendarAvailabilityResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("location", type=str, required=True)
         self.reqparse.add_argument("month", type=str, required=True)
 
@@ -313,7 +348,7 @@ class ConfirmationOutboxResource(_ManagerReport):
 
 class GetReservationByCardNumberResource(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
+        self.reqparse = QueryRequestParser()
         self.reqparse.add_argument("username", type=str, required=True)
         self.reqparse.add_argument("card_number", type=str, required=True)
 
