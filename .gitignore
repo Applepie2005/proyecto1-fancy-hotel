@@ -4,3 +4,7 @@ __pycache__/
 .venv/
 venv/
 *.log
+.fancyhotel-server.pid
+fancyhotel-server.log
+.DS_Store
+.impeccable/

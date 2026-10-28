@@ -15,5 +15,21 @@ services:
     volumes:
       - fancyhotel_mysql:/var/lib/mysql
 
+  web:
+    build: .
+    container_name: fancyhotel-web
+    ports:
+      - "5001:5001"
+    environment:
+      FANCYHOTEL_HOST: "0.0.0.0"
+      FANCYHOTEL_PORT: "5001"
+      FANCYHOTEL_DEBUG: "0"
+      FANCYHOTEL_DB_HOST: mysql
+      FANCYHOTEL_DB_PASSWORD: password
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   fancyhotel_mysql:

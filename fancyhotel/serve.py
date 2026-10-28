@@ -38,6 +38,11 @@ api.add_resource(restapi.GetReservationByCardNumberResource, '/api/reservation/c
 
 
 if __name__ == '__main__':
-	app.run('0.0.0.0', 5000, debug=True)
+	host = os.environ.get("FANCYHOTEL_HOST", "127.0.0.1")
+	port = int(os.environ.get("FANCYHOTEL_PORT", "5001"))
+	debug = os.environ.get("FANCYHOTEL_DEBUG", "1").lower() in ("1", "true", "yes")
+	use_reloader = os.environ.get("FANCYHOTEL_RELOAD", "").lower() in ("1", "true", "yes")
+	print("\n>>> Abre en el navegador: http://127.0.0.1:{}\n".format(port))
+	app.run(host, port, debug=debug, use_reloader=use_reloader)
 
 
