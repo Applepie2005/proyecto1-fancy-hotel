@@ -1,20 +1,35 @@
-<div ng-hide="loggedInBool || userType=='manager'">
-  <h2>Manager login required.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool || userType=='manager'">
+    <h2>Acceso de gerente requerido</h2>
+    <p><a class="btn btn-primary" href="#/login">Iniciar sesión</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='manager'">
-  <h2>Confirmation outbox</h2>
-  <p>This local outbox is used as evidence of confirmation delivery without requiring SMTP during the demo.</p>
-  <table>
-    <tr><th>ID</th><th>Reservation</th><th>Recipient</th><th>Subject</th><th>Body</th><th>Created</th></tr>
-    <tr ng-repeat="item in confirmations">
-      <td>{{item.outbox_id}}</td>
-      <td>{{item.reservation_id}}</td>
-      <td>{{item.recipient_email}}</td>
-      <td>{{item.subject}}</td>
-      <td>{{item.body}}</td>
-      <td>{{item.created_at}}</td>
-    </tr>
-  </table>
-  <p><a href="#/portal">Return to portal</a></p>
+  <div ng-show="loggedInBool && userType=='manager'">
+    <header class="fh-page-header">
+      <h1>Bandeja de confirmaciones</h1>
+      <p class="fh-lead">Outbox local que demuestra el envío de confirmaciones sin SMTP en la demo.</p>
+    </header>
+
+    <div class="fh-panel">
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Reserva</th><th>Destinatario</th><th>Asunto</th><th>Cuerpo</th><th>Creado</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in confirmations">
+              <td>{{item.outbox_id}}</td>
+              <td>{{item.reservation_id}}</td>
+              <td>{{item.recipient_email}}</td>
+              <td>{{item.subject}}</td>
+              <td>{{item.body}}</td>
+              <td>{{item.created_at}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

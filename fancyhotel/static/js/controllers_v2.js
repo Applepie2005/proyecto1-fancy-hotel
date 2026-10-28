@@ -1,8 +1,42 @@
 var resourceModule = angular.module('resourceModule', ['ngResource']);
 
+function apiErrorMessage(error, fallback) {
+  fallback = fallback || 'No se pudo completar la operación.';
+  if (!error) {
+    return fallback;
+  }
+  if (error.status === 0) {
+    return 'No hay conexión con el servidor. Verifica que la app esté en ejecución.';
+  }
+  var data = error.data;
+  if (!data) {
+    return fallback;
+  }
+  if (typeof data === 'string') {
+    return data;
+  }
+  if (data.error) {
+    return data.error;
+  }
+  if (data.message) {
+    if (typeof data.message === 'string') {
+      return data.message;
+    }
+    var keys = Object.keys(data.message);
+    if (keys.length) {
+      return data.message[keys[0]];
+    }
+  }
+  return fallback;
+}
+
 resourceModule.factory('authFactory', function($resource) {
   return $resource('/api', {}, {
-    Register: { method: 'POST', url: '/api/register' },
+    Register: {
+      method: 'POST',
+      url: '/api/register',
+      headers: { 'Content-Type': 'application/json;charset=utf-8' }
+    },
     Login: { method: 'POST', url: '/api/login' },
     Logout: { method: 'POST', url: '/api/logout' }
   });
@@ -55,6 +89,31 @@ resourceModule.factory('paymentFactory', function($resource) {
 
 angular.module('FancyHotelApp', ['ngRoute', 'ngResource', 'resourceModule'])
 
+.controller('shellController', function($rootScope, $scope, $location, authFactory, $window) {
+  function syncSession() {
+    $scope.currentUser = $rootScope.currentUser;
+    $scope.userType = $rootScope.userType;
+    $scope.loggedInBool = $rootScope.alreadyLoggedIn();
+  }
+  syncSession();
+  $scope.path = $location.path();
+  $scope.isLoggedIn = function() {
+    return $rootScope.currentUser !== '';
+  };
+  $scope.logout = function() {
+    authFactory.Logout({}, function() {
+      $rootScope.clearSession();
+      syncSession();
+      $window.location.href = '#/login';
+    });
+  };
+  $scope.$watch(function() { return $rootScope.currentUser; }, syncSession);
+  $scope.$watch(function() { return $rootScope.userType; }, syncSession);
+  $scope.$on('$routeChangeSuccess', function() {
+    $scope.path = $location.path();
+  });
+})
+
 .run(function($rootScope) {
   $rootScope.currentUser = localStorage.getItem('fancyhotel.user') || '';
   $rootScope.userType = localStorage.getItem('fancyhotel.role') || '';
@@ -79,21 +138,32 @@ angular.module('FancyHotelApp', ['ngRoute', 'ngResource', 'resourceModule'])
 
 .controller('registerController', function($scope, authFactory, $window) {
   $scope.username = 'C';
+  $scope.myRegex = /^C[a-zA-Z0-9]{4}$/;
   $scope.submit = function() {
+    var username = ($scope.username || '').trim().toUpperCase();
+    if (!$scope.myRegex.test(username)) {
+      window.alert('Usuario inválido: usa C seguido de 4 letras o números (ejemplo C1234).');
+      return;
+    }
+    if (($scope.password || '').length < 6) {
+      window.alert('La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
     if ($scope.confirmPass !== $scope.password) {
-      window.alert('Passwords do not match.');
+      window.alert('Las contraseñas no coinciden.');
       return;
     }
     authFactory.Register({
-      username: $scope.username,
-      email: $scope.email,
+      username: username,
+      email: ($scope.email || '').trim(),
       password: $scope.password,
-      firstName: $scope.firstName,
-      lastName: $scope.lastName
+      firstName: ($scope.firstName || '').trim(),
+      lastName: ($scope.lastName || '').trim()
     }, function() {
+      window.alert('Cuenta creada. Ahora puedes iniciar sesión.');
       $window.location.href = '#/login';
     }, function(error) {
-      window.alert(error.data.error || 'Registration failed.');
+      window.alert(apiErrorMessage(error, 'No se pudo registrar la cuenta.'));
     });
   };
 })
@@ -109,14 +179,8 @@ angular.module('FancyHotelApp', ['ngRoute', 'ngResource', 'resourceModule'])
   };
 })
 
-.controller('portalController', function($rootScope, $scope, authFactory, $window) {
+.controller('portalController', function($rootScope, $scope) {
   $scope.loggedInBool = $rootScope.alreadyLoggedIn();
-  $scope.logout = function() {
-    authFactory.Logout({}, function() {
-      $rootScope.clearSession();
-      $window.location.href = '#/login';
-    });
-  };
 })
 
 .controller('reservationController', function($rootScope, $scope, $window, reservationFactory, paymentFactory) {

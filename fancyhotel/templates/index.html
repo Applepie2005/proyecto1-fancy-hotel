@@ -1,88 +1,71 @@
 <!DOCTYPE html>
-<html ng-app="FancyHotelApp" >
+<html lang="es" ng-app="FancyHotelApp">
 <head>
-	<style>
-		body {
-			background: #f6f1e8;
-			color: #2d241c;
-			font-family: Georgia, "Times New Roman", serif;
-			margin: 24px;
-		}
-		.app-shell {
-			background: #fffaf0;
-			border: 1px solid #d8c7a8;
-			box-shadow: 0 12px 35px rgba(69, 50, 27, 0.12);
-			margin: 0 auto;
-			max-width: 1120px;
-			padding: 28px;
-		}
-		.brand {
-			letter-spacing: 0.04em;
-			margin-top: 0;
-		}
-		.calendar-grid {
-			display: grid;
-			grid-template-columns: repeat(7, minmax(80px, 1fr));
-			gap: 8px;
-			margin-top: 16px;
-		}
-		.calendar-day {
-			border: 1px solid #d8c7a8;
-			border-radius: 6px;
-			padding: 8px;
-			min-height: 74px;
-		}
-		.available { background: #e7f6df; }
-		.partial { background: #fff0bf; }
-		.full { background: #f7d5cd; }
-		table{
-			width: 100%;
-		}
-		table, th, td {
-		    border: 1px solid black;
-		    border-collapse: collapse;
-		    
-		}
-		th, td {
-		    padding: 5px;
-		}
-	</style>
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>
-		Fancy Hotel
-	</title>
-
- <!-- Latest compiled and minified CSS, Bootstrap -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="static/libs/bootstrap-datepicker.css">
+	<title>Fancy Hotel 4400</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="static/libs/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="static/css/fancy-hotel.css">
 </head>
+<body ng-controller="shellController">
+<div class="fh-app">
+	<aside class="fh-rail" aria-label="Navegación principal">
+		<a class="fh-rail__brand" href="#/">
+			<span class="fh-rail__mark" aria-hidden="true"></span>
+			<span class="fh-rail__name">Fancy Hotel 4400</span>
+			<span class="fh-rail__sub">Red de propiedades</span>
+		</a>
 
-<body>
-<div class="app-shell">
+		<div class="fh-rail__session" ng-cloak ng-show="isLoggedIn()">
+			<p class="fh-rail__user"><span class="fh-mono">{{currentUser}}</span></p>
+			<p class="fh-rail__role" ng-class="'fh-rail__role--' + userType">{{userType}}</p>
+			<button type="button" class="btn btn-default btn-sm fh-rail__logout" ng-click="logout()" ng-show="isLoggedIn()">Cerrar sesión</button>
+		</div>
 
-<h1 class="brand">Fancy Hotel 4400</h1>
+		<nav class="fh-rail__nav">
+			<p class="fh-rail__group">General</p>
+			<a class="fh-rail__link" href="#/" ng-class="{'is-active': path === '/'}">Inicio</a>
+			<a class="fh-rail__link" href="#/portal" ng-show="isLoggedIn()" ng-class="{'is-active': path === '/portal'}">Centro de operaciones</a>
+			<a class="fh-rail__link" href="#/login" ng-hide="isLoggedIn()" ng-class="{'is-active': path === '/login'}">Iniciar sesión</a>
+			<a class="fh-rail__link" href="#/register" ng-hide="isLoggedIn()" ng-class="{'is-active': path === '/register'}">Registro</a>
 
+			<div ng-show="isLoggedIn() && userType === 'customer'">
+				<p class="fh-rail__group">Cliente</p>
+				<a class="fh-rail__link fh-rail__link--atl" href="#/reserve" ng-class="{'is-active': path === '/reserve' || path === '/searchroom'}">Reservar</a>
+				<a class="fh-rail__link fh-rail__link--cha" href="#/payment" ng-class="{'is-active': path === '/payment'}">Pagos</a>
+				<a class="fh-rail__link fh-rail__link--sav" href="#/update" ng-class="{'is-active': path === '/update'}">Modificar</a>
+				<a class="fh-rail__link fh-rail__link--orl" href="#/cancel" ng-class="{'is-active': path === '/cancel'}">Cancelar</a>
+				<a class="fh-rail__link fh-rail__link--mia" href="#/provideFeedback" ng-class="{'is-active': path === '/provideFeedback'}">Reseña</a>
+				<a class="fh-rail__link" href="#/viewFeedback" ng-class="{'is-active': path === '/viewFeedback'}">Opiniones</a>
+			</div>
 
+			<div ng-show="isLoggedIn() && userType === 'manager'">
+				<p class="fh-rail__group">Gerencia</p>
+				<a class="fh-rail__link fh-rail__link--atl" href="#/resReport" ng-class="{'is-active': path === '/resReport'}">Reservas</a>
+				<a class="fh-rail__link fh-rail__link--cha" href="#/popCatReport" ng-class="{'is-active': path === '/popCatReport'}">Categorías</a>
+				<a class="fh-rail__link fh-rail__link--sav" href="#/revenueReport" ng-class="{'is-active': path === '/revenueReport'}">Ingresos</a>
+				<a class="fh-rail__link fh-rail__link--orl" href="#/demandForecast" ng-class="{'is-active': path === '/demandForecast'}">Demanda</a>
+				<a class="fh-rail__link fh-rail__link--mia" href="#/pricing" ng-class="{'is-active': path === '/pricing'}">Precios</a>
+				<a class="fh-rail__link" href="#/confirmations" ng-class="{'is-active': path === '/confirmations'}">Confirmaciones</a>
+			</div>
+		</nav>
+	</aside>
 
-<div id="content" ng-view></div>
+	<div class="fh-main">
+		<main class="fh-workspace" id="content" ng-view></main>
+		<footer class="fh-footer">CS 4400 · Demo local · Reglas de negocio visibles en pantalla</footer>
+	</div>
+</div>
 
-<!--Scripts up in here-->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
-
-<script src="static/js/controllers_v2.js"></script>
-
-<!--Stuff below here is for Bootstrap-->
-<!-- jQuery library, the end goal is to not need this. -->
+<script src="static/js/controllers_v2.js?v=20260328"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="static/libs/moment.js"></script>
 <script src="static/libs/bootstrap-datepicker.js"></script>
-
-</div>
 </body>
 </html>

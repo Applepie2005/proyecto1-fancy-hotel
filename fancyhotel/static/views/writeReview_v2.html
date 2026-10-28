@@ -1,34 +1,43 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to provide feedback.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para dejar reseña</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='customer'">
-  <h2>Provide feedback</h2>
-  <p>You can review a location only after a completed, non-cancelled stay.</p>
-  <form ng-submit="addReview()">
-    <div class="form-group">
-      <label>Hotel location</label>
-      <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
-    </div>
-    <div class="form-group">
-      <label>Rating</label>
-      <select class="form-control" ng-model="rating">
-        <option value="excellent">Excellent</option>
-        <option value="good">Good</option>
-        <option value="neutral">Neutral</option>
-        <option value="bad">Bad</option>
-        <option value="very bad">Very bad</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Comment</label>
-      <textarea class="form-control" ng-model="comment"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit review</button>
-  </form>
-  <p><a href="#/portal">Return to portal</a></p>
-</div>
+  <div ng-show="loggedInBool && userType=='customer'">
+    <header class="fh-page-header">
+      <h1>Dejar reseña</h1>
+      <p class="fh-lead">Solo puedes valorar una sede tras una estadía completada y no cancelada.</p>
+    </header>
 
-<div ng-show="loggedInBool && userType=='manager'">
-  <p>Only customers can provide feedback.</p>
+    <div class="fh-panel fh-form">
+      <form ng-submit="addReview()">
+        <div class="form-group">
+          <label>Sede</label>
+          <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
+        </div>
+        <div class="form-group">
+          <label>Calificación</label>
+          <select class="form-control" ng-model="rating">
+            <option value="excellent">Excelente</option>
+            <option value="good">Buena</option>
+            <option value="neutral">Neutral</option>
+            <option value="bad">Mala</option>
+            <option value="very bad">Muy mala</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Comentario</label>
+          <textarea class="form-control" ng-model="comment" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar reseña</button>
+      </form>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
+
+  <div class="fh-alert fh-alert--warn" ng-show="loggedInBool && userType=='manager'">
+    Solo los clientes publican reseñas de estadía.
+  </div>
 </div>

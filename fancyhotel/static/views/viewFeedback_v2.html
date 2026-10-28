@@ -1,24 +1,46 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to view feedback.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para ver reseñas</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
-<div ng-show="loggedInBool">
-  <h2>Guest feedback</h2>
-  <form ng-submit="getReviews()">
-    <label>Hotel location</label>
-    <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
-    <br>
-    <button type="submit" class="btn btn-primary">Load reviews</button>
-  </form>
-  <p>{{emptyTable}}</p>
-  <table ng-show="reviews.length">
-    <tr><th>Rating</th><th>Comment</th><th>User</th><th>Date</th></tr>
-    <tr ng-repeat="review in reviews">
-      <td>{{review.rating}}</td>
-      <td>{{review.comment}}</td>
-      <td>{{review.username}}</td>
-      <td>{{review.created_at}}</td>
-    </tr>
-  </table>
-  <p><a href="#/portal">Return to portal</a></p>
+  <div ng-show="loggedInBool">
+    <header class="fh-page-header">
+      <h1>Reseñas de huéspedes</h1>
+      <p class="fh-lead">Filtra por sede para leer comentarios recientes.</p>
+    </header>
+
+    <div class="fh-panel fh-form">
+      <form ng-submit="getReviews()">
+        <div class="fh-form-row">
+          <div class="form-group">
+            <label>Sede</label>
+            <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-primary btn-block">Cargar reseñas</button>
+          </div>
+        </div>
+      </form>
+      <p class="help-text" ng-show="emptyTable">{{emptyTable}}</p>
+      <div class="fh-table-wrap" ng-show="reviews.length">
+        <table>
+          <thead>
+            <tr><th>Calificación</th><th>Comentario</th><th>Usuario</th><th>Fecha</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="review in reviews">
+              <td>{{review.rating}}</td>
+              <td>{{review.comment}}</td>
+              <td>{{review.username}}</td>
+              <td>{{review.created_at}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

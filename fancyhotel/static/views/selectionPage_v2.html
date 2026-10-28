@@ -1,29 +1,46 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to use Fancy Hotel.</h2>
-</div>
-
-<div ng-show="loggedInBool">
-  <p>Hello {{currentUser}}. You are a {{userType}}.</p>
-  <button class="btn btn-default" ng-click="logout()">Logout</button>
-  <hr>
-
-  <div ng-show="userType=='customer'">
-    <h2>Customer portal</h2>
-    <p><a href="#/reserve">Make a reservation</a></p>
-    <p><a href="#/payment">Manage saved payment cards</a></p>
-    <p><a href="#/update">Update a reservation</a></p>
-    <p><a href="#/cancel">Cancel a reservation</a></p>
-    <p><a href="#/provideFeedback">Provide feedback after a completed stay</a></p>
-    <p><a href="#/viewFeedback">View feedback</a></p>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para abrir el centro de operaciones</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
   </div>
 
-  <div ng-show="userType=='manager'">
-    <h2>Manager portal</h2>
-    <p><a href="#/resReport">Reservation report</a></p>
-    <p><a href="#/popCatReport">Popular room category report</a></p>
-    <p><a href="#/revenueReport">Revenue report</a></p>
-    <p><a href="#/demandForecast">Demand forecast graph</a></p>
-    <p><a href="#/pricing">Demand-based price rules</a></p>
-    <p><a href="#/confirmations">Confirmation outbox</a></p>
+  <div ng-show="loggedInBool">
+    <header class="fh-page-header">
+      <h1>Centro de operaciones</h1>
+      <p class="fh-lead">Usuario <span class="fh-mono">{{currentUser}}</span> · rol {{userType}}. Elige una estación de servicio.</p>
+    </header>
+
+    <div class="fh-panel">
+      <svg class="fh-transit-map" viewBox="0 0 480 200" role="img" aria-label="Red de propiedades activa">
+        <rect width="480" height="200" fill="#07111f" rx="8"/>
+        <path d="M40 100 H440" stroke="#334155" stroke-width="3"/>
+        <path d="M120 100 H360" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+        <path d="M200 100 V50 H280" stroke="#2563eb" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <path d="M280 50 H360 V100" stroke="#059669" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="120" cy="100" r="11" fill="#dc2626" stroke="#fff" stroke-width="3"/>
+        <circle cx="200" cy="100" r="11" fill="#2563eb" stroke="#fff" stroke-width="3"/>
+        <circle cx="280" cy="50" r="11" fill="#d97706" stroke="#fff" stroke-width="3"/>
+        <circle cx="360" cy="100" r="11" fill="#059669" stroke="#fff" stroke-width="3"/>
+        <circle cx="420" cy="100" r="11" fill="#7c3aed" stroke="#fff" stroke-width="3"/>
+      </svg>
+    </div>
+
+    <ul class="fh-stations" ng-show="userType=='customer'">
+      <li><a href="#/reserve"><span class="fh-stations__label">Reservar habitación</span><span class="fh-stations__hint">Calendario y checkout</span></a></li>
+      <li><a href="#/payment"><span class="fh-stations__label">Tarjetas guardadas</span><span class="fh-stations__hint">Números enmascarados</span></a></li>
+      <li><a href="#/update"><span class="fh-stations__label">Modificar fechas</span><span class="fh-stations__hint">Disponibilidad previa</span></a></li>
+      <li><a href="#/cancel"><span class="fh-stations__label">Cancelar reserva</span><span class="fh-stations__hint">Política de reembolso</span></a></li>
+      <li><a href="#/provideFeedback"><span class="fh-stations__label">Enviar reseña</span><span class="fh-stations__hint">Tras estadía completada</span></a></li>
+      <li><a href="#/viewFeedback"><span class="fh-stations__label">Leer opiniones</span><span class="fh-stations__hint">Por sede</span></a></li>
+    </ul>
+
+    <ul class="fh-stations" ng-show="userType=='manager'">
+      <li><a href="#/resReport"><span class="fh-stations__label">Informe de reservas</span><span class="fh-stations__hint">Por mes y sede</span></a></li>
+      <li><a href="#/popCatReport"><span class="fh-stations__label">Categorías populares</span><span class="fh-stations__hint">Tipos de habitación</span></a></li>
+      <li><a href="#/revenueReport"><span class="fh-stations__label">Ingresos</span><span class="fh-stations__hint">Totales por ubicación</span></a></li>
+      <li><a href="#/demandForecast"><span class="fh-stations__label">Previsión de demanda</span><span class="fh-stations__hint">Gráfico + regla documentada</span></a></li>
+      <li><a href="#/pricing"><span class="fh-stations__label">Reglas de precio</span><span class="fh-stations__hint">Ajustes confirmados</span></a></li>
+      <li><a href="#/confirmations"><span class="fh-stations__label">Bandeja de confirmaciones</span><span class="fh-stations__hint">Outbox local</span></a></li>
+    </ul>
   </div>
 </div>

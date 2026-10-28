@@ -1,19 +1,37 @@
-<div ng-hide="loggedInBool || userType=='manager'">
-  <h2>Manager login required.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool || userType=='manager'">
+    <h2>Acceso de gerente requerido</h2>
+    <p><a class="btn btn-primary" href="#/login">Iniciar sesión</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='manager'">
-  <h2>Demand forecast</h2>
-  <p>Forecast uses historical occupancy. It intentionally uses a documented moving-average rule instead of an opaque model.</p>
-  <canvas id="forecastChart" height="110"></canvas>
-  <table>
-    <tr><th>Location</th><th>Month</th><th>Predicted occupancy</th><th>Price suggestion</th></tr>
-    <tr ng-repeat="item in demandForecast.forecast">
-      <td>{{item.location}}</td>
-      <td>{{item.month}}</td>
-      <td>{{item.predicted_occupancy}}%</td>
-      <td>{{item.price_suggestion}}</td>
-    </tr>
-  </table>
-  <p><a href="#/portal">Return to portal</a></p>
+  <div ng-show="loggedInBool && userType=='manager'">
+    <header class="fh-page-header">
+      <h1>Previsión de demanda</h1>
+      <p class="fh-lead">Media móvil documentada sobre ocupación histórica; sin modelos opacos.</p>
+    </header>
+
+    <div class="fh-chart-card">
+      <canvas id="forecastChart" height="110" aria-label="Gráfico de previsión de demanda"></canvas>
+    </div>
+
+    <div class="fh-panel">
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Sede</th><th>Mes</th><th>Ocupación prevista</th><th>Sugerencia de precio</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in demandForecast.forecast">
+              <td>{{item.location}}</td>
+              <td>{{item.month}}</td>
+              <td>{{item.predicted_occupancy}}%</td>
+              <td>{{item.price_suggestion}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

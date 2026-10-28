@@ -1,44 +1,57 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to cancel reservations.</h2>
-</div>
-
-<div ng-show="loggedInBool && userType=='customer'">
-  <h2>Cancel reservation</h2>
-
-  <div ng-show="cancelView1">
-    <form ng-submit="findReservation()">
-      <label>Reservation ID</label>
-      <input class="form-control" ng-model="resID" required>
-      <br>
-      <button type="submit" class="btn btn-primary">Find reservation</button>
-    </form>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para cancelar reservas</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
   </div>
 
-  <div ng-show="cancelView2">
-    <h3>Reservation {{resID}}</h3>
-    <table>
-      <tr><th>Room</th><th>Type</th><th>Dates</th><th>Cost</th></tr>
-      <tr ng-repeat="room in currRes.rooms">
-        <td>{{room.room_number}}</td>
-        <td>{{room.room_type}}</td>
-        <td>{{currRes.checkin_date}} to {{currRes.checkout_date}}</td>
-        <td>{{room.cost | currency}}</td>
-      </tr>
-    </table>
-    <h4>Cancellation policy</h4>
-    <ul>
-      <li>1 day or less before check-in: no refund.</li>
-      <li>Within 3 days before check-in: 80% refund.</li>
-      <li>Earlier than 3 days before check-in: full refund.</li>
-    </ul>
-    <p>Total reservation cost after cancellation: {{cancel_cost | currency}}</p>
-    <p>Refund amount: {{refund_amount | currency}}</p>
-    <button class="btn btn-danger" ng-click="cancelReservation()">Cancel reservation</button>
+  <div ng-show="loggedInBool && userType=='customer'">
+    <header class="fh-page-header">
+      <h1>Cancelar reserva</h1>
+      <p class="fh-lead">Consulta el reembolso estimado antes de confirmar la cancelación.</p>
+    </header>
+
+    <div class="fh-panel fh-form" ng-show="cancelView1">
+      <form ng-submit="findReservation()">
+        <div class="form-group">
+          <label>ID de reserva</label>
+          <input class="form-control" ng-model="resID" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar reserva</button>
+      </form>
+    </div>
+
+    <div class="fh-panel" ng-show="cancelView2">
+      <h3>Reserva {{resID}}</h3>
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Habitación</th><th>Tipo</th><th>Fechas</th><th>Costo</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="room in currRes.rooms">
+              <td>{{room.room_number}}</td>
+              <td>{{room.room_type}}</td>
+              <td>{{currRes.checkin_date}} → {{currRes.checkout_date}}</td>
+              <td>{{room.cost | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Política de cancelación</h3>
+      <ul>
+        <li>1 día o menos antes del check-in: sin reembolso.</li>
+        <li>Dentro de 3 días: reembolso del 80%.</li>
+        <li>Con más de 3 días de anticipación: reembolso total.</li>
+      </ul>
+      <p><strong>Costo tras cancelación:</strong> {{cancel_cost | currency}}</p>
+      <p><strong>Reembolso:</strong> {{refund_amount | currency}}</p>
+      <button class="btn btn-danger" ng-click="cancelReservation()">Confirmar cancelación</button>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
   </div>
 
-  <p><a href="#/portal">Return to portal</a></p>
-</div>
-
-<div ng-show="loggedInBool && userType=='manager'">
-  <p>Only customers can cancel reservations.</p>
+  <div class="fh-alert fh-alert--warn" ng-show="loggedInBool && userType=='manager'">
+    Solo los clientes cancelan sus reservas.
+  </div>
 </div>

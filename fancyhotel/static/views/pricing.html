@@ -1,49 +1,66 @@
-<div ng-hide="loggedInBool || userType=='manager'">
-  <h2>Manager login required.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool || userType=='manager'">
+    <h2>Acceso de gerente requerido</h2>
+    <p><a class="btn btn-primary" href="#/login">Iniciar sesión</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='manager'">
-  <h2>Demand-based price rules</h2>
-  <p>The forecast suggests changes, but the manager confirms every rule.</p>
-  <form ng-submit="createRule()">
-    <div class="row">
-      <div class="col-sm-2">
-        <label>Location</label>
-        <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
-      </div>
-      <div class="col-sm-2">
-        <label>Room type</label>
-        <select class="form-control" ng-model="room_type" ng-options="type for type in roomTypes"></select>
-      </div>
-      <div class="col-sm-2">
-        <label>Start</label>
-        <input class="form-control" ng-model="start_date" placeholder="YYYY-MM-DD" required>
-      </div>
-      <div class="col-sm-2">
-        <label>End</label>
-        <input class="form-control" ng-model="end_date" placeholder="YYYY-MM-DD" required>
-      </div>
-      <div class="col-sm-2">
-        <label>Adjustment %</label>
-        <input class="form-control" type="number" ng-model="adjustment_percent" required>
-      </div>
-      <div class="col-sm-2">
-        <label>&nbsp;</label>
-        <button class="btn btn-primary btn-block" type="submit">Create rule</button>
+  <div ng-show="loggedInBool && userType=='manager'">
+    <header class="fh-page-header">
+      <h1>Reglas de precio por demanda</h1>
+      <p class="fh-lead">La previsión sugiere cambios; cada regla la confirma un gerente.</p>
+    </header>
+
+    <div class="fh-panel fh-form">
+      <form ng-submit="createRule()">
+        <div class="fh-form-row">
+          <div class="form-group">
+            <label>Sede</label>
+            <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
+          </div>
+          <div class="form-group">
+            <label>Tipo</label>
+            <select class="form-control" ng-model="room_type" ng-options="type for type in roomTypes"></select>
+          </div>
+          <div class="form-group">
+            <label>Inicio</label>
+            <input class="form-control" ng-model="start_date" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label>Fin</label>
+            <input class="form-control" ng-model="end_date" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label>Ajuste %</label>
+            <input class="form-control" type="number" ng-model="adjustment_percent" required>
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button class="btn btn-primary btn-block" type="submit">Crear regla</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="fh-panel">
+      <h3>Reglas activas</h3>
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Sede</th><th>Tipo</th><th>Fechas</th><th>Ajuste</th><th>Creada por</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="rule in priceRules">
+              <td>{{rule.location}}</td>
+              <td>{{rule.room_type}}</td>
+              <td>{{rule.start_date}} → {{rule.end_date}}</td>
+              <td>{{rule.adjustment_percent}}%</td>
+              <td>{{rule.created_by}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </form>
 
-  <h3>Existing rules</h3>
-  <table>
-    <tr><th>Location</th><th>Type</th><th>Dates</th><th>Adjustment</th><th>Created by</th></tr>
-    <tr ng-repeat="rule in priceRules">
-      <td>{{rule.location}}</td>
-      <td>{{rule.room_type}}</td>
-      <td>{{rule.start_date}} to {{rule.end_date}}</td>
-      <td>{{rule.adjustment_percent}}%</td>
-      <td>{{rule.created_by}}</td>
-    </tr>
-  </table>
-  <p><a href="#/portal">Return to portal</a></p>
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

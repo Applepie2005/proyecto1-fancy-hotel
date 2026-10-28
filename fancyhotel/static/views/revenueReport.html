@@ -1,32 +1,32 @@
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para ver informes</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
+  <div ng-show="loggedInBool">
+    <header class="fh-page-header">
+      <h1>Informe de ingresos</h1>
+      <p class="fh-lead">Sesión: <strong>{{currentUser}}</strong></p>
+    </header>
 
-<div ng-hide="{{loggedInBool}}" important>
-	<h1>You aren't logged in yet! Please <a href="#/login">login</a> to view this page.</h1>
-</div>
+    <div class="fh-alert fh-alert--warn" ng-show="userType=='customer'">
+      Solo gerentes pueden ver informes. Inicia sesión con una cuenta de gerente.
+    </div>
 
-<div ng-show="{{loggedInBool}}" important>
-<h1>Hello {{currentUser}} ! </h1><br />
+    <div ng-show="userType=='manager'">
+      <div class="fh-panel">
+        <ul class="fh-report-list">
+          <li ng-repeat="(month, locgroup) in revenueReport">
+            <strong>{{getMonth(month)}}</strong>
+            <ul>
+              <li ng-repeat="(location, cost) in locgroup">{{location}}: {{cost}}</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-<div ng-show="{{userType=='customer'}}">
-  Only managers can vew reports. Please login to a manager account to view this page.
-</div>
-
-<div ng-show="{{userType=='manager'}}">
-	<h2>Revenue Report</h2><br /><br />
-
-<ul ng-repeat="(month, locgroup) in revenueReport">
-  <li>{{getMonth(month)}}</li>
-  <ul ng-repeat="(location, cost) in locgroup">
-    <li >{{location}}: {{cost}}</li>
-    </li>
-  </ul>
-</ul>
-
-
-
-
-
-</div>
-
-<a href="#/portal">Return to the portal page</a>
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

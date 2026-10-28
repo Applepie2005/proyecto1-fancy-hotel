@@ -1,37 +1,36 @@
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para ver informes</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
+  <div ng-show="loggedInBool">
+    <header class="fh-page-header">
+      <h1>Categorías de habitación populares</h1>
+      <p class="fh-lead">Sesión: <strong>{{currentUser}}</strong></p>
+    </header>
 
+    <div class="fh-alert fh-alert--warn" ng-show="userType=='customer'">
+      Solo gerentes pueden ver informes. Inicia sesión con una cuenta de gerente.
+    </div>
 
-<div ng-hide="{{loggedInBool}}" important>
-	<h1>You aren't logged in yet! Please <a href="#/login">login</a> to view this page.</h1>
-</div>
+    <div ng-show="userType=='manager'">
+      <div class="fh-panel">
+        <ul class="fh-report-list">
+          <li ng-repeat="(month, locgroup) in popCatReport">
+            <strong>{{getMonth(month)}}</strong>
+            <ul ng-repeat="(location, stats) in locgroup">
+              <li><strong>{{location}}</strong>
+                <ul>
+                  <li ng-repeat="stat in stats">{{stat.type}}: {{stat.count}}</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-<div ng-show="{{loggedInBool}}" important>
-<h1>Hello {{currentUser}} ! </h1><br />
-
-<div ng-show="{{userType=='customer'}}">
-  Only managers can vew reports. Please login to a manager account to view this page.
-</div>
-
-<div ng-show="{{userType=='manager'}}">
-
-<h2>Popular Room-Category Report</h2>
-
-<ul ng-repeat="(month, locgroup) in popCatReport">
-  <li>{{getMonth(month)}}</li>
-  <ul ng-repeat="(location, stats) in locgroup">
-    <li >{{location}}</li>
-    	<ul ng-repeat="stat in stats">
-    		<li>
-    			{{stat.type}}: {{stat.count}}
-    		</li>
-    	</ul>
-    </li>
-  </ul>
-</ul>
-
-
-
-</div>
-
-<a href="#/portal">Return to the portal page</a>
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
 </div>

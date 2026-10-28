@@ -1,52 +1,74 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to manage payment information.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para gestionar pagos</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='customer'">
-  <h2>Saved payment cards</h2>
-  <p>Cards are returned masked and CVV is never shown by the API.</p>
+  <div ng-show="loggedInBool && userType=='customer'">
+    <header class="fh-page-header">
+      <h1>Tarjetas guardadas</h1>
+      <p class="fh-lead">La API devuelve números enmascarados y nunca muestra el CVV.</p>
+    </header>
 
-  <table ng-show="creditCards.length">
-    <tr><th>Card</th><th>Name</th><th>Expiration</th></tr>
-    <tr ng-repeat="card in creditCards">
-      <td>{{card.masked_number}}</td>
-      <td>{{card.name}}</td>
-      <td>{{card.expiration_date}}</td>
-    </tr>
-  </table>
-
-  <h3>Add card</h3>
-  <form ng-submit="addCard()">
-    <div class="form-group">
-      <label>Name on card</label>
-      <input class="form-control" ng-model="cardName" required>
+    <div class="fh-panel" ng-show="creditCards.length">
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Tarjeta</th><th>Titular</th><th>Vencimiento</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="card in creditCards">
+              <td>{{card.masked_number}}</td>
+              <td>{{card.name}}</td>
+              <td>{{card.expiration_date}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Card number</label>
-      <input class="form-control" ng-model="creditCardNumber" maxlength="16" required>
-    </div>
-    <div class="form-group">
-      <label>Expiration date</label>
-      <input class="form-control" ng-model="expirationDate" placeholder="YYYY-MM-DD" required>
-    </div>
-    <div class="form-group">
-      <label>CVV</label>
-      <input class="form-control" ng-model="cvv" maxlength="4" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Add card</button>
-  </form>
 
-  <h3>Delete card</h3>
-  <form ng-submit="deleteCard()">
-    <select class="form-control" ng-model="cardToDelete">
-      <option ng-repeat="card in creditCards" value="{{card.last4}}">{{card.masked_number}}</option>
-    </select>
-    <br>
-    <button type="submit" class="btn btn-danger">Delete selected card</button>
-  </form>
-  <p><a href="#/portal">Return to portal</a></p>
-</div>
+    <div class="fh-panel fh-form">
+      <h3>Agregar tarjeta</h3>
+      <form ng-submit="addCard()">
+        <div class="form-group">
+          <label>Nombre en la tarjeta</label>
+          <input class="form-control" ng-model="cardName" required>
+        </div>
+        <div class="fh-form-row">
+          <div class="form-group">
+            <label>Número</label>
+            <input class="form-control" ng-model="creditCardNumber" maxlength="16" inputmode="numeric" required>
+          </div>
+          <div class="form-group">
+            <label>Vencimiento</label>
+            <input class="form-control" ng-model="expirationDate" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label>CVV</label>
+            <input class="form-control" ng-model="cvv" maxlength="4" inputmode="numeric" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar tarjeta</button>
+      </form>
+    </div>
 
-<div ng-show="loggedInBool && userType=='manager'">
-  <p>Only customers can manage payment information.</p>
+    <div class="fh-panel fh-form">
+      <h3>Eliminar tarjeta</h3>
+      <form ng-submit="deleteCard()">
+        <div class="form-group">
+          <label>Seleccionar tarjeta</label>
+          <select class="form-control" ng-model="cardToDelete">
+            <option ng-repeat="card in creditCards" value="{{card.last4}}">{{card.masked_number}}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-danger">Eliminar seleccionada</button>
+      </form>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
+  </div>
+
+  <div class="fh-alert fh-alert--warn" ng-show="loggedInBool && userType=='manager'">
+    Solo los clientes gestionan métodos de pago personales.
+  </div>
 </div>

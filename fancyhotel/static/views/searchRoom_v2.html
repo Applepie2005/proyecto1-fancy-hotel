@@ -1,103 +1,129 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to reserve a room.</h2>
-</div>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para reservar</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
+  </div>
 
-<div ng-show="loggedInBool && userType=='customer'">
-  <div ng-hide="confirmationPage">
-    <h2>Search available rooms</h2>
-    <form ng-submit="submit()">
-      <div class="row">
-        <div class="col-sm-3">
-          <label>Location</label>
-          <select class="form-control" ng-model="location" ng-options="loc for loc in locations" ng-change="loadCalendar()"></select>
+  <div ng-show="loggedInBool && userType=='customer'">
+    <header class="fh-page-header">
+      <h1>Buscar habitaciones</h1>
+      <p class="fh-lead">Filtra por sede, fechas y tipo; el calendario muestra ocupación del mes.</p>
+    </header>
+
+    <div ng-hide="confirmationPage">
+      <div class="fh-panel fh-form">
+        <form ng-submit="submit()">
+          <div class="fh-form-row">
+            <div class="form-group">
+              <label>Sede</label>
+              <select class="form-control" ng-model="location" ng-options="loc for loc in locations" ng-change="loadCalendar()"></select>
+            </div>
+            <div class="form-group">
+              <label>Check-in</label>
+              <input class="form-control" type="text" ng-model="checkIn" placeholder="YYYY-MM-DD" required>
+            </div>
+            <div class="form-group">
+              <label>Check-out</label>
+              <input class="form-control" type="text" ng-model="checkOut" placeholder="YYYY-MM-DD" required>
+            </div>
+            <div class="form-group">
+              <label>Mes del calendario</label>
+              <input class="form-control" type="text" ng-model="calendarMonth" placeholder="YYYY-MM" ng-change="loadCalendar()">
+            </div>
+          </div>
+          <div class="fh-form-row">
+            <div class="form-group">
+              <label>Tipo de habitación</label>
+              <select class="form-control" ng-model="roomType">
+                <option value="">Cualquiera</option>
+                <option ng-repeat="type in roomTypes" value="{{type}}">{{type}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Precio máximo por noche</label>
+              <input class="form-control" type="number" min="0" ng-model="maxPrice" placeholder="Opcional">
+            </div>
+            <div class="form-group">
+              <label>&nbsp;</label>
+              <button type="submit" class="btn btn-primary btn-block">Buscar disponibilidad</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="fh-panel fh-panel--flat">
+        <h3>Calendario · {{location}}</h3>
+        <div class="fh-legend">
+          <span class="available"><i></i> Disponible</span>
+          <span class="partial"><i></i> Parcial</span>
+          <span class="full"><i></i> Completo</span>
         </div>
-        <div class="col-sm-3">
-          <label>Check-in</label>
-          <input class="form-control" type="text" ng-model="checkIn" placeholder="YYYY-MM-DD" required>
-        </div>
-        <div class="col-sm-3">
-          <label>Check-out</label>
-          <input class="form-control" type="text" ng-model="checkOut" placeholder="YYYY-MM-DD" required>
-        </div>
-        <div class="col-sm-3">
-          <label>Calendar month</label>
-          <input class="form-control" type="text" ng-model="calendarMonth" placeholder="YYYY-MM" ng-change="loadCalendar()">
+        <div class="calendar-grid" ng-if="calendar.days">
+          <div class="calendar-day {{day.status}}" ng-repeat="day in calendar.days">
+            <strong>{{day.date | date:'MMM d'}}</strong><br>
+            {{day.booked}} / {{day.total}} reservadas
+          </div>
         </div>
       </div>
-      <div class="row" style="margin-top: 12px;">
-        <div class="col-sm-4">
-          <label>Room type</label>
-          <select class="form-control" ng-model="roomType">
-            <option value="">Any type</option>
-            <option ng-repeat="type in roomTypes" value="{{type}}">{{type}}</option>
-          </select>
-        </div>
-        <div class="col-sm-4">
-          <label>Maximum price per night</label>
-          <input class="form-control" type="number" min="0" ng-model="maxPrice" placeholder="Optional">
-        </div>
-        <div class="col-sm-4">
-          <label>&nbsp;</label>
-          <button type="submit" class="btn btn-primary btn-block">Search</button>
-        </div>
-      </div>
-    </form>
 
-    <h3>Availability calendar for {{location}}</h3>
-    <p>Green: available. Yellow: partially occupied. Red: fully occupied.</p>
-    <div class="calendar-grid" ng-if="calendar.days">
-      <div class="calendar-day {{day.status}}" ng-repeat="day in calendar.days">
-        <strong>{{day.date | date:'MMM d'}}</strong><br>
-        {{day.booked}} / {{day.total}} booked
+      <div class="fh-panel" ng-show="hideForm">
+        <h3>Resultados · {{checkIn}} a {{checkOut}}</h3>
+        <p class="help-text text-danger" ng-show="error">{{error}}</p>
+        <form ng-submit="bookRooms()">
+          <div class="fh-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Elegir</th>
+                  <th>Habitación</th>
+                  <th>Tipo</th>
+                  <th>Capacidad</th>
+                  <th>Precio/noche</th>
+                  <th>Base</th>
+                  <th>Cama extra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="room in roomsAvailable">
+                  <td><input type="checkbox" ng-model="selectedRooms[room.location+room.room_number]" aria-label="Seleccionar habitación"></td>
+                  <td>{{room.room_number}}</td>
+                  <td>{{room.room_type}}</td>
+                  <td>{{room.capacity}}</td>
+                  <td>{{room.cost | currency}}</td>
+                  <td>{{room.base_cost | currency}}</td>
+                  <td><label><input type="checkbox" ng-model="extra_beds[room.location+room.room_number]"> {{room.extra_bed_price | currency}}</label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="fh-form-row" style="margin-top: 1rem; align-items: center;">
+            <button type="button" class="btn btn-default" ng-click="updateTotalCost()">Recalcular total</button>
+            <p style="margin: 0; font-weight: 700; font-size: 1.125rem;">Total: {{total_cost | currency}}</p>
+          </div>
+          <hr>
+          <div class="form-group">
+            <label>Tarjeta guardada</label>
+            <select class="form-control" ng-model="cardLast4" required>
+              <option ng-repeat="card in creditCards" value="{{card.last4}}">{{card.masked_number}} · vence {{card.expiration_date}}</option>
+            </select>
+            <p class="help-text" ng-show="creditCards.length==0">Sin tarjetas. <a href="#/payment">Agrega una tarjeta</a> antes de reservar.</p>
+          </div>
+          <button type="submit" class="btn btn-success" ng-disabled="creditCards.length==0">Confirmar reserva</button>
+        </form>
       </div>
     </div>
 
-    <h3 ng-show="hideForm">Rooms from {{checkIn}} to {{checkOut}}</h3>
-    <p>{{error}}</p>
-    <form ng-submit="bookRooms()" ng-show="hideForm">
-      <table>
-        <tr>
-          <th>Select</th>
-          <th>Room</th>
-          <th>Type</th>
-          <th>Capacity</th>
-          <th>Nightly price</th>
-          <th>Base price</th>
-          <th>Extra bed</th>
-        </tr>
-        <tr ng-repeat="room in roomsAvailable">
-          <td><input type="checkbox" ng-model="selectedRooms[room.location+room.room_number]"></td>
-          <td>{{room.room_number}}</td>
-          <td>{{room.room_type}}</td>
-          <td>{{room.capacity}}</td>
-          <td>{{room.cost | currency}}</td>
-          <td>{{room.base_cost | currency}}</td>
-          <td><input type="checkbox" ng-model="extra_beds[room.location+room.room_number]"> {{room.extra_bed_price | currency}}</td>
-        </tr>
-      </table>
-      <br>
-      <button type="button" class="btn btn-default" ng-click="updateTotalCost()">Update total</button>
-      <strong>Total: {{total_cost | currency}}</strong>
-      <hr>
-      <label>Saved payment card</label>
-      <select class="form-control" ng-model="cardLast4" required>
-        <option ng-repeat="card in creditCards" value="{{card.last4}}">{{card.masked_number}} - expires {{card.expiration_date}}</option>
-      </select>
-      <p ng-show="creditCards.length==0">No saved card yet. <a href="#/payment">Add a card</a>.</p>
-      <button type="submit" class="btn btn-success" ng-disabled="creditCards.length==0">Book selected rooms</button>
-    </form>
+    <div class="fh-panel" ng-show="confirmationPage">
+      <h2>Reserva confirmada</h2>
+      <p><strong>ID de reserva:</strong> {{confirmationData.id}}</p>
+      <p><strong>Código de confirmación:</strong> {{confirmationData.confirmation_code}}</p>
+      <p class="help-text">La confirmación también se guardó en el outbox local de la demo.</p>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
   </div>
 
-  <div ng-show="confirmationPage">
-    <h2>Reservation confirmed</h2>
-    <p><strong>Reservation ID:</strong> {{confirmationData.id}}</p>
-    <p><strong>Confirmation code:</strong> {{confirmationData.confirmation_code}}</p>
-    <p>The confirmation was also stored in the local outbox for demo purposes.</p>
+  <div class="fh-alert fh-alert--warn" ng-show="loggedInBool && userType=='manager'">
+    Solo los clientes pueden crear reservas desde este flujo.
   </div>
-
-  <p><a href="#/portal">Return to portal</a></p>
-</div>
-
-<div ng-show="loggedInBool && userType=='manager'">
-  <p>Only customers can reserve rooms.</p>
 </div>

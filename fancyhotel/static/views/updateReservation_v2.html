@@ -1,51 +1,71 @@
-<div ng-hide="loggedInBool">
-  <h2>Please <a href="#/login">login</a> to update reservations.</h2>
-</div>
-
-<div ng-show="loggedInBool && userType=='customer'">
-  <h2>Update reservation dates</h2>
-
-  <div ng-show="viewPart1">
-    <form ng-submit="findReservation()">
-      <label>Reservation ID</label>
-      <input class="form-control" ng-model="resID" required>
-      <br>
-      <button type="submit" class="btn btn-primary">Find reservation</button>
-    </form>
+<div class="fh-page">
+  <div class="fh-auth-gate" ng-hide="loggedInBool">
+    <h2>Inicia sesión para modificar reservas</h2>
+    <p><a class="btn btn-primary" href="#/login">Ir a login</a></p>
   </div>
 
-  <div ng-show="viewPart2">
-    <h3>Reservation {{resID}}</h3>
-    <p>Confirmation code: {{currRes.confirmation_code}}</p>
-    <table>
-      <tr><th>Room</th><th>Type</th><th>Current dates</th><th>Nightly price</th></tr>
-      <tr ng-repeat="room in currRes.rooms">
-        <td>{{room.room_number}}</td>
-        <td>{{room.room_type}}</td>
-        <td>{{currRes.checkin_date}} to {{currRes.checkout_date}}</td>
-        <td>{{room.cost | currency}}</td>
-      </tr>
-    </table>
-    <hr>
-    <form ng-submit="searchAvailability()">
-      <label>New check-in</label>
-      <input class="form-control" ng-model="newCheckinDate" placeholder="YYYY-MM-DD" required>
-      <label>New check-out</label>
-      <input class="form-control" ng-model="newCheckoutDate" placeholder="YYYY-MM-DD" required>
-      <br>
-      <button type="submit" class="btn btn-default">Check availability</button>
-    </form>
+  <div ng-show="loggedInBool && userType=='customer'">
+    <header class="fh-page-header">
+      <h1>Modificar fechas</h1>
+      <p class="fh-lead">Busca tu reserva por ID y valida disponibilidad antes de confirmar.</p>
+    </header>
+
+    <div class="fh-panel fh-form" ng-show="viewPart1">
+      <form ng-submit="findReservation()">
+        <div class="form-group">
+          <label>ID de reserva</label>
+          <input class="form-control" ng-model="resID" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar reserva</button>
+      </form>
+    </div>
+
+    <div class="fh-panel" ng-show="viewPart2">
+      <h3>Reserva {{resID}}</h3>
+      <p>Código: <strong>{{currRes.confirmation_code}}</strong></p>
+      <div class="fh-table-wrap">
+        <table>
+          <thead>
+            <tr><th>Habitación</th><th>Tipo</th><th>Fechas actuales</th><th>Precio/noche</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="room in currRes.rooms">
+              <td>{{room.room_number}}</td>
+              <td>{{room.room_type}}</td>
+              <td>{{currRes.checkin_date}} → {{currRes.checkout_date}}</td>
+              <td>{{room.cost | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <form class="fh-form" ng-submit="searchAvailability()" style="margin-top: 1rem;">
+        <div class="fh-form-row">
+          <div class="form-group">
+            <label>Nuevo check-in</label>
+            <input class="form-control" ng-model="newCheckinDate" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label>Nuevo check-out</label>
+            <input class="form-control" ng-model="newCheckoutDate" placeholder="YYYY-MM-DD" required>
+          </div>
+          <div class="form-group">
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-default btn-block">Verificar disponibilidad</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="fh-panel" ng-show="viewPart3">
+      <p>{{availability.message}}</p>
+      <p><strong>Nuevo total:</strong> {{newCost | currency}}</p>
+      <button class="btn btn-success" ng-click="updateReservation()" ng-show="availability.avail">Confirmar cambio</button>
+    </div>
+
+    <a class="fh-back" href="#/portal">← Volver al portal</a>
   </div>
 
-  <div ng-show="viewPart3">
-    <p>{{availability.message}}</p>
-    <p>New total: {{newCost | currency}}</p>
-    <button class="btn btn-success" ng-click="updateReservation()" ng-show="availability.avail">Confirm update</button>
+  <div class="fh-alert fh-alert--warn" ng-show="loggedInBool && userType=='manager'">
+    Solo los clientes modifican sus reservas.
   </div>
-
-  <p><a href="#/portal">Return to portal</a></p>
-</div>
-
-<div ng-show="loggedInBool && userType=='manager'">
-  <p>Only customers can update reservations.</p>
 </div>
