@@ -1,0 +1,34 @@
+<div ng-hide="loggedInBool">
+  <h2>Please <a href="#/login">login</a> to provide feedback.</h2>
+</div>
+
+<div ng-show="loggedInBool && userType=='customer'">
+  <h2>Provide feedback</h2>
+  <p>You can review a location only after a completed, non-cancelled stay.</p>
+  <form ng-submit="addReview()">
+    <div class="form-group">
+      <label>Hotel location</label>
+      <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
+    </div>
+    <div class="form-group">
+      <label>Rating</label>
+      <select class="form-control" ng-model="rating">
+        <option value="excellent">Excellent</option>
+        <option value="good">Good</option>
+        <option value="neutral">Neutral</option>
+        <option value="bad">Bad</option>
+        <option value="very bad">Very bad</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Comment</label>
+      <textarea class="form-control" ng-model="comment"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit review</button>
+  </form>
+  <p><a href="#/portal">Return to portal</a></p>
+</div>
+
+<div ng-show="loggedInBool && userType=='manager'">
+  <p>Only customers can provide feedback.</p>
+</div>

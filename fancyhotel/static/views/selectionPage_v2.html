@@ -1,0 +1,29 @@
+<div ng-hide="loggedInBool">
+  <h2>Please <a href="#/login">login</a> to use Fancy Hotel.</h2>
+</div>
+
+<div ng-show="loggedInBool">
+  <p>Hello {{currentUser}}. You are a {{userType}}.</p>
+  <button class="btn btn-default" ng-click="logout()">Logout</button>
+  <hr>
+
+  <div ng-show="userType=='customer'">
+    <h2>Customer portal</h2>
+    <p><a href="#/reserve">Make a reservation</a></p>
+    <p><a href="#/payment">Manage saved payment cards</a></p>
+    <p><a href="#/update">Update a reservation</a></p>
+    <p><a href="#/cancel">Cancel a reservation</a></p>
+    <p><a href="#/provideFeedback">Provide feedback after a completed stay</a></p>
+    <p><a href="#/viewFeedback">View feedback</a></p>
+  </div>
+
+  <div ng-show="userType=='manager'">
+    <h2>Manager portal</h2>
+    <p><a href="#/resReport">Reservation report</a></p>
+    <p><a href="#/popCatReport">Popular room category report</a></p>
+    <p><a href="#/revenueReport">Revenue report</a></p>
+    <p><a href="#/demandForecast">Demand forecast graph</a></p>
+    <p><a href="#/pricing">Demand-based price rules</a></p>
+    <p><a href="#/confirmations">Confirmation outbox</a></p>
+  </div>
+</div>

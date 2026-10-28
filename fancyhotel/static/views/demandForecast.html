@@ -1,0 +1,19 @@
+<div ng-hide="loggedInBool || userType=='manager'">
+  <h2>Manager login required.</h2>
+</div>
+
+<div ng-show="loggedInBool && userType=='manager'">
+  <h2>Demand forecast</h2>
+  <p>Forecast uses historical occupancy. It intentionally uses a documented moving-average rule instead of an opaque model.</p>
+  <canvas id="forecastChart" height="110"></canvas>
+  <table>
+    <tr><th>Location</th><th>Month</th><th>Predicted occupancy</th><th>Price suggestion</th></tr>
+    <tr ng-repeat="item in demandForecast.forecast">
+      <td>{{item.location}}</td>
+      <td>{{item.month}}</td>
+      <td>{{item.predicted_occupancy}}%</td>
+      <td>{{item.price_suggestion}}</td>
+    </tr>
+  </table>
+  <p><a href="#/portal">Return to portal</a></p>
+</div>

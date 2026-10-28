@@ -1,0 +1,44 @@
+<div ng-hide="loggedInBool">
+  <h2>Please <a href="#/login">login</a> to cancel reservations.</h2>
+</div>
+
+<div ng-show="loggedInBool && userType=='customer'">
+  <h2>Cancel reservation</h2>
+
+  <div ng-show="cancelView1">
+    <form ng-submit="findReservation()">
+      <label>Reservation ID</label>
+      <input class="form-control" ng-model="resID" required>
+      <br>
+      <button type="submit" class="btn btn-primary">Find reservation</button>
+    </form>
+  </div>
+
+  <div ng-show="cancelView2">
+    <h3>Reservation {{resID}}</h3>
+    <table>
+      <tr><th>Room</th><th>Type</th><th>Dates</th><th>Cost</th></tr>
+      <tr ng-repeat="room in currRes.rooms">
+        <td>{{room.room_number}}</td>
+        <td>{{room.room_type}}</td>
+        <td>{{currRes.checkin_date}} to {{currRes.checkout_date}}</td>
+        <td>{{room.cost | currency}}</td>
+      </tr>
+    </table>
+    <h4>Cancellation policy</h4>
+    <ul>
+      <li>1 day or less before check-in: no refund.</li>
+      <li>Within 3 days before check-in: 80% refund.</li>
+      <li>Earlier than 3 days before check-in: full refund.</li>
+    </ul>
+    <p>Total reservation cost after cancellation: {{cancel_cost | currency}}</p>
+    <p>Refund amount: {{refund_amount | currency}}</p>
+    <button class="btn btn-danger" ng-click="cancelReservation()">Cancel reservation</button>
+  </div>
+
+  <p><a href="#/portal">Return to portal</a></p>
+</div>
+
+<div ng-show="loggedInBool && userType=='manager'">
+  <p>Only customers can cancel reservations.</p>
+</div>

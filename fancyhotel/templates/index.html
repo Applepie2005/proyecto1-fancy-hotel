@@ -2,6 +2,39 @@
 <html ng-app="FancyHotelApp" >
 <head>
 	<style>
+		body {
+			background: #f6f1e8;
+			color: #2d241c;
+			font-family: Georgia, "Times New Roman", serif;
+			margin: 24px;
+		}
+		.app-shell {
+			background: #fffaf0;
+			border: 1px solid #d8c7a8;
+			box-shadow: 0 12px 35px rgba(69, 50, 27, 0.12);
+			margin: 0 auto;
+			max-width: 1120px;
+			padding: 28px;
+		}
+		.brand {
+			letter-spacing: 0.04em;
+			margin-top: 0;
+		}
+		.calendar-grid {
+			display: grid;
+			grid-template-columns: repeat(7, minmax(80px, 1fr));
+			gap: 8px;
+			margin-top: 16px;
+		}
+		.calendar-day {
+			border: 1px solid #d8c7a8;
+			border-radius: 6px;
+			padding: 8px;
+			min-height: 74px;
+		}
+		.available { background: #e7f6df; }
+		.partial { background: #fff0bf; }
+		.full { background: #f7d5cd; }
 		table{
 			width: 100%;
 		}
@@ -26,8 +59,9 @@
 </head>
 
 <body>
+<div class="app-shell">
 
-<p><h1>Fancy Hotel 4400</h1></p>
+<h1 class="brand">Fancy Hotel 4400</h1>
 
 
 
@@ -38,16 +72,17 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-route.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-resource.js"></script>
 
-<script src="static/js/controllers.js"></script>
+<script src="static/js/controllers_v2.js"></script>
 
 <!--Stuff below here is for Bootstrap-->
 <!-- jQuery library, the end goal is to not need this. -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Latest compiled JavaScript -->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="static/libs/moment.js"></script>
 <script src="static/libs/bootstrap-datepicker.js"></script>
 
-
+</div>
 </body>
 </html>

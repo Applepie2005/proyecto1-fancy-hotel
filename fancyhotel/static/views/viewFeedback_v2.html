@@ -1,0 +1,24 @@
+<div ng-hide="loggedInBool">
+  <h2>Please <a href="#/login">login</a> to view feedback.</h2>
+</div>
+
+<div ng-show="loggedInBool">
+  <h2>Guest feedback</h2>
+  <form ng-submit="getReviews()">
+    <label>Hotel location</label>
+    <select class="form-control" ng-model="location" ng-options="loc for loc in locations"></select>
+    <br>
+    <button type="submit" class="btn btn-primary">Load reviews</button>
+  </form>
+  <p>{{emptyTable}}</p>
+  <table ng-show="reviews.length">
+    <tr><th>Rating</th><th>Comment</th><th>User</th><th>Date</th></tr>
+    <tr ng-repeat="review in reviews">
+      <td>{{review.rating}}</td>
+      <td>{{review.comment}}</td>
+      <td>{{review.username}}</td>
+      <td>{{review.created_at}}</td>
+    </tr>
+  </table>
+  <p><a href="#/portal">Return to portal</a></p>
+</div>

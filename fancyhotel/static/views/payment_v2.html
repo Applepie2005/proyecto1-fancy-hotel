@@ -1,0 +1,52 @@
+<div ng-hide="loggedInBool">
+  <h2>Please <a href="#/login">login</a> to manage payment information.</h2>
+</div>
+
+<div ng-show="loggedInBool && userType=='customer'">
+  <h2>Saved payment cards</h2>
+  <p>Cards are returned masked and CVV is never shown by the API.</p>
+
+  <table ng-show="creditCards.length">
+    <tr><th>Card</th><th>Name</th><th>Expiration</th></tr>
+    <tr ng-repeat="card in creditCards">
+      <td>{{card.masked_number}}</td>
+      <td>{{card.name}}</td>
+      <td>{{card.expiration_date}}</td>
+    </tr>
+  </table>
+
+  <h3>Add card</h3>
+  <form ng-submit="addCard()">
+    <div class="form-group">
+      <label>Name on card</label>
+      <input class="form-control" ng-model="cardName" required>
+    </div>
+    <div class="form-group">
+      <label>Card number</label>
+      <input class="form-control" ng-model="creditCardNumber" maxlength="16" required>
+    </div>
+    <div class="form-group">
+      <label>Expiration date</label>
+      <input class="form-control" ng-model="expirationDate" placeholder="YYYY-MM-DD" required>
+    </div>
+    <div class="form-group">
+      <label>CVV</label>
+      <input class="form-control" ng-model="cvv" maxlength="4" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add card</button>
+  </form>
+
+  <h3>Delete card</h3>
+  <form ng-submit="deleteCard()">
+    <select class="form-control" ng-model="cardToDelete">
+      <option ng-repeat="card in creditCards" value="{{card.last4}}">{{card.masked_number}}</option>
+    </select>
+    <br>
+    <button type="submit" class="btn btn-danger">Delete selected card</button>
+  </form>
+  <p><a href="#/portal">Return to portal</a></p>
+</div>
+
+<div ng-show="loggedInBool && userType=='manager'">
+  <p>Only customers can manage payment information.</p>
+</div>
