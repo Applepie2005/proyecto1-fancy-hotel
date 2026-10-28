@@ -22,7 +22,7 @@ Orden sugerido antes de la defensa. Lo marcado con ✅ ya está cubierto en el r
 
 | Orden | Tarea | Estado |
 | --- | --- | --- |
-| 1 | Completar nombres y cédulas en [`ENTREGA-Proyecto1-DSaIA.md`](ENTREGA-Proyecto1-DSaIA.md) §1 | ⚠️ |
+| 1 | Completar cédulas en [`ENTREGA-Proyecto1-DSaIA.md`](ENTREGA-Proyecto1-DSaIA.md) §1 (David Developer, Allisson QA, Fernando Reviewer) | ⚠️ |
 | 2 | Entregar PDF o enlace al repo según indique el profesor | ⚠️ |
 | 3 | Revisar que `DSaIA-Proyecto1.pdf` / enunciado coincida con lo implementado | ✅ |
 

@@ -163,4 +163,4 @@ Enunciado PDF: `fancyhotel/DSaIA-Proyecto1.pdf`
 ## Créditos
 
 Proyecto base: CS 4400 Online Hotel Reservation System (Georgia Tech lineage).  
-Modernización y historias DSaIA: grupo Fancy Hotel 4400 — ver commits en `main`.
+Modernización DSaIA: David Bustamante (Developer), Allisson Ortega (QA), Fernando Delgado (Reviewer) — ver commits en `main`.

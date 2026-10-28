@@ -11,9 +11,9 @@
 
 | Campo | Valor |
 | --- | --- |
-| Integrante 1 (Developer / Reviewer / QA — rotar según sprint) | _Completar nombre y cédula_ |
-| Integrante 2 | _Completar_ |
-| Integrante 3 | _Completar_ |
+| David Bustamante — Developer | _Cédula:_ |
+| Allisson Ortega — QA | _Cédula:_ |
+| Fernando Delgado — Reviewer | _Cédula:_ |
 | Repositorio del grupo | https://github.com/Applepie2005/proyecto1-fancy-hotel |
 | Repositorio base elegido | https://github.com/thegrucoder/Hotel-Reservation-System |
 | Herramienta de IA principal | **Cursor** (agente de escritorio) |
@@ -197,4 +197,4 @@ Material detallado: [`docs/presentacion.md`](presentacion.md)
 
 ---
 
-_Completar nombres del grupo en la sección 1 antes de entregar. Opcional: adjuntar diapositivas (Canva/PPT) como enlace en la entrega del campus._
+_Completar cédulas en la sección 1 si el campus las exige. Opcional: adjuntar diapositivas (Canva/PPT) como enlace en la entrega del campus._

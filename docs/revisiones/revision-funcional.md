@@ -9,6 +9,8 @@
 - Forecast de demanda y reglas de precio para gerente.
 - Cancelacion, modificacion, busqueda filtrada, confirmacion y resenas validadas.
 
+Reviewer: **Fernando Delgado**. QA: **Allisson Ortega**. Desarrollo principal: **David Bustamante**.
+
 ## Checklist Reviewer
 
 - [x] El codigo conserva Flask, AngularJS y MySQL.

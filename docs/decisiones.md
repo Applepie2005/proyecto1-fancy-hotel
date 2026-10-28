@@ -34,7 +34,7 @@
 
 | Decision | Motivo | Evidencia |
 | --- | --- | --- |
-| Historias US01–US09 en markdown con roles Developer/Reviewer/QA | Equivalente planificado a issues de GitHub | [`historias-issues.md`](historias-issues.md) |
+| Historias US01–US09 con roles fijos (Developer David, Reviewer Fernando, QA Allisson) | Equivalente planificado a issues de GitHub | [`historias-issues.md`](historias-issues.md) |
 | Revision por pares sin PR mergeado en remoto | Tiempo de integracion; checklist formal sustituye el hilo de PR | [`revisiones/revision-funcional.md`](revisiones/revision-funcional.md) |
 | Commits identificables por capa (API → UI → infra → docs) | Facilita demo de “commits identificables” aunque `main` sea la rama visible | [`evidencia-restricciones.md`](evidencia-restricciones.md) §3 |
 | Log de IA solo para interacciones que alteraron diseno o codigo | Alineado con la plantilla del curso (no registrar cada prompt) | [`ai-development-log.md`](ai-development-log.md) |

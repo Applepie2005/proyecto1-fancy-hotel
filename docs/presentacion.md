@@ -4,6 +4,8 @@
 
 Proyecto: Fancy Hotel, sistema de reservas web basado en Flask, AngularJS y MySQL.
 
+Integrantes: David Bustamante (Developer), Allisson Ortega (QA), Fernando Delgado (Reviewer).
+
 Herramienta de IA usada: Cursor desde escritorio.
 
 Objetivo de la demo: mostrar que la IA fue usada con analisis, validacion, correccion humana y pruebas.

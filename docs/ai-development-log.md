@@ -13,12 +13,12 @@
 | UI / marca | Cursor | Modernizar interfaz sin cambiar AngularJS | Propuso rail lateral, vistas en espanol y tokens Fancy Hotel 4400 | Aceptada parcialmente. Se revisaron textos y flujos; no se cambio el stack. |
 | Infra Docker | Cursor | Empaquetar app + MySQL para demo en clase | `docker-compose.yml`, `Dockerfile`, scripts `up.sh` / `run.sh` | Aceptada. Puerto 5001 y variables documentadas en README. |
 | Registro API | Cursor | Endurecer registro de usuarios | Genero parsers por endpoint y validacion de email | Aceptada con ajustes manuales en mensajes de error y codigos HTTP. |
-| Documentacion entrega | Cursor | Armar paquete DSaIA (restricciones 1-10) | ENTREGA, matriz de evidencia, prioridades | Aceptada. Integrante completa nombres del grupo en ENTREGA §1. |
+| Documentacion entrega | Cursor | Armar paquete DSaIA (restricciones 1-10) | ENTREGA, matriz de evidencia, prioridades | Aceptada. Grupo: David Bustamante, Allisson Ortega, Fernando Delgado (ENTREGA §1). |
 | Diseno producto | Cursor | Capturar alcance y design system | PRODUCT.md, DESIGN.md, guia de tokens | Aceptada como soporte de presentacion; no es criterio CS 4400 original. |
 | Capa de datos | Cursor | Reescribir consultas MySQL y semillas | `db/repository.py` con solapamiento, forecast, reglas de precio | Aceptada. Se dejo `mysqldb.py` intacto como contraste con Python 2. |
 | Sesion y roles | Cursor | Proteger endpoints de gerente | Decoradores / comprobacion de rol en `api_v2.py` | Aceptada. QA manual: cliente 403 en `/api/reports/demandForecast`. |
 | Politica de precios sugeridos | Cursor | Traducir forecast a accion comercial | Umbrales 60%/80% → `+8%`, `+15%`, `0%` en `demand_forecast()` | Aceptada con ajuste humano: solo sugerencia textual, sin aplicar precios solos. |
-| Entrega DSaIA | Cursor | Prioridades, matriz restricciones 1–10, ampliar log IA | `prioridades-entrega.md`, `evidencia-restricciones.md`, plantilla issues | Aceptada. Issues en GitHub y nombres del grupo quedan pendientes del equipo. |
+| Entrega DSaIA | Cursor | Prioridades, matriz restricciones 1–10, ampliar log IA | `prioridades-entrega.md`, `evidencia-restricciones.md`, plantilla issues | Aceptada. Issues en GitHub siguen opcionales; integrantes identificados en ENTREGA §1. |
 | Revision de trazabilidad | Cursor | Verificar US → codigo → pytest | Tabla en `evidencia-restricciones.md`; 4 tests en verde (MySQL Docker) | Aceptada. US05, US07–US09 siguen con QA manual documentado en revision funcional. |
 
 ## Ejemplos de respuestas incorrectas de la IA
