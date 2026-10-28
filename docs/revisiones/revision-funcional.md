@@ -32,8 +32,18 @@
 - [x] Reporte de forecast y regla de precios solo para gerente.
 - [x] Cliente recibe 403 al consultar `/api/reports/demandForecast` sin rol gerente.
 
+## Evidencia de pruebas automatizadas
+
+```text
+$ python -m pytest -q
+....                                                                     [100%]
+4 passed in 0.70s
+```
+
+(Requiere MySQL activo, p. ej. `docker compose up -d mysql`.)
+
 ## Riesgos abiertos
 
-- La verificacion automatizada completa requiere MySQL activo. En la maquina actual Docker Desktop no estaba iniciado.
+- Sin Docker/MySQL, pytest hace skip o falla al cargar la app; documentar en defensa si la maquina del evaluador no tiene contenedores.
 - El correo real queda fuera del alcance; se demuestra con `Confirmation_Outbox`.
 - No se implemento pasarela de pago real.

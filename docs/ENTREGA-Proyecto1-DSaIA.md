@@ -78,9 +78,9 @@ La evaluación no se centra en “cuánto código generó la IA”, sino en **c�
 | # | Requisito | Evidencia en este repositorio |
 | --- | --- | --- |
 | 1 | Repositorio Git | https://github.com/Applepie2005/proyecto1-fancy-hotel |
-| 2 | Issues o historias de usuario | [`docs/historias-issues.md`](historias-issues.md) (formato issue + US01–US09) |
+| 2 | Issues o historias de usuario | [`historias-issues.md`](historias-issues.md) + plantilla para GitHub [`github-issues-plantilla.md`](github-issues-plantilla.md) (pendiente: crear issues en remoto o captura) |
 | 3 | Commits identificables | Historial en `main` (p. ej. `6aead48` APIs, `4b72e6a` UI, `9d417d1` log IA) |
-| 4 | Uso de ramas | Ramas `feature/us-XX-*` definidas por historia; integración documentada en issues. _Opcional: crear ramas en GitHub antes de la defensa si el profesor exige ramas remotas visibles._ |
+| 4 | Uso de ramas | Ramas `feature/us-XX-*` por historia en [`historias-issues.md`](historias-issues.md); commits por capa en `main`. Detalle y narrativa: [`evidencia-restricciones.md`](evidencia-restricciones.md) §4. |
 | 5 | Pull Request o revisión equivalente | [`docs/revisiones/revision-funcional.md`](revisiones/revision-funcional.md) (checklist Reviewer + QA) |
 | 6 | Pruebas automatizadas | [`tests/test_api.py`](../tests/test_api.py) — login, tarjetas enmascaradas, solapamiento, forecast gerente, **403 cliente en forecast** |
 | 7 | Evidencia del uso de IA | [`docs/ai-development-log.md`](ai-development-log.md) |
@@ -192,6 +192,8 @@ Material detallado: [`docs/presentacion.md`](presentacion.md)
 | [`docs/decisiones.md`](decisiones.md) | Decisiones humanas |
 | [`docs/revisiones/revision-funcional.md`](revisiones/revision-funcional.md) | Revisión tipo PR |
 | [`docs/presentacion.md`](presentacion.md) | Guion de defensa |
+| [`docs/prioridades-entrega.md`](prioridades-entrega.md) | Qué hacer antes de entregar (orden de prioridad) |
+| [`docs/evidencia-restricciones.md`](evidencia-restricciones.md) | Matriz restricciones 1–10 + trazabilidad US → código → tests |
 
 ---
 

@@ -89,6 +89,8 @@ Casos principales en `tests/test_api.py`:
 
 Detalle, criterios de aceptación y ramas sugeridas: [`docs/historias-issues.md`](docs/historias-issues.md)
 
+**Prioridades de entrega y matriz de evidencia (restricciones 1–10):** [`docs/prioridades-entrega.md`](docs/prioridades-entrega.md) · [`docs/evidencia-restricciones.md`](docs/evidencia-restricciones.md) · [`docs/github-issues-plantilla.md`](docs/github-issues-plantilla.md)
+
 ---
 
 ## Estructura del código
