@@ -1,10 +1,13 @@
+import os
+
 from flask import Flask, render_template
 from flask_restful import Api
-import api as restapi
+import api_v2 as restapi
 
 
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FANCYHOTEL_SECRET_KEY", "dev-secret-key")
 app.debug = True
 api = Api(app)
 
@@ -14,6 +17,7 @@ def index():
 	return render_template("index.html")
 
 api.add_resource(restapi.LoginResource, '/api/login')
+api.add_resource(restapi.LogoutResource, '/api/logout')
 api.add_resource(restapi.NewUserRegistrationResource, '/api/register')
 api.add_resource(restapi.SearchRoomsResource, '/api/searchRoom')
 api.add_resource(restapi.CreateReservationResource, '/api/reservation/create')
@@ -23,9 +27,13 @@ api.add_resource(restapi.UpdateReservationConfirmResource, '/api/reservation/<st
 api.add_resource(restapi.CreditCardResource, '/api/payment')
 api.add_resource(restapi.ReviewResource, '/api/review')
 api.add_resource(restapi.CancelReservationResource, '/api/reservation/<string:reservation_id>/cancel')
+api.add_resource(restapi.CalendarAvailabilityResource, '/api/availability/calendar')
 api.add_resource(restapi.ReservationReportResource, '/api/reports/reservation')
 api.add_resource(restapi.PopularRoomReportResource, '/api/reports/popularRoom')
 api.add_resource(restapi.RevenueReportResource, '/api/reports/revenue')
+api.add_resource(restapi.DemandForecastResource, '/api/reports/demandForecast')
+api.add_resource(restapi.PriceRuleResource, '/api/price-rules')
+api.add_resource(restapi.ConfirmationOutboxResource, '/api/confirmations')
 api.add_resource(restapi.GetReservationByCardNumberResource, '/api/reservation/cardNumber')
 
 

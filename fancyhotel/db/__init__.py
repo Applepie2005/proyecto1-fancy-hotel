@@ -1,4 +1,4 @@
-from db.mysqldb import MysqlManager
+from db.repository import MysqlManager
 
 mysqldb = MysqlManager()
-#instantiates the database
+# instantiates the database
