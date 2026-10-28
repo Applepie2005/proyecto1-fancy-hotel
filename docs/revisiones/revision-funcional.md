@@ -30,6 +30,7 @@
 - [x] Cancelacion con politica de reembolso.
 - [x] Resena bloqueada si no hay estancia completada.
 - [x] Reporte de forecast y regla de precios solo para gerente.
+- [x] Cliente recibe 403 al consultar `/api/reports/demandForecast` sin rol gerente.
 
 ## Riesgos abiertos
 

@@ -19,6 +19,7 @@ Cada historia se desarrollo con una rama sugerida, criterios de aceptacion y rot
 - `tests/test_api.py::test_customer_login_and_saved_cards_are_masked`
 - `tests/test_api.py::test_search_uses_date_overlap_to_hide_booked_room`
 - `tests/test_api.py::test_manager_can_get_demand_forecast`
+- `tests/test_api.py::test_customer_cannot_access_demand_forecast`
 
 ## Credenciales demo
 
